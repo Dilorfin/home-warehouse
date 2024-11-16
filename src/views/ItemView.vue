@@ -12,7 +12,7 @@ const isLoading = ref(true);
 const itemExists = ref(false);
 const data = ref("");
 
-fetch("http://10.0.1.102:5000/get-data/" + itemId.value).then(async (response: Response)=>{
+fetch("/api/GetItem/?id=" + itemId.value).then(async (response: Response)=>{
   console.log(response);
   let result = await response.json();
   if (response.ok)
@@ -23,7 +23,7 @@ fetch("http://10.0.1.102:5000/get-data/" + itemId.value).then(async (response: R
   else
   {
     itemExists.value = false;
-    data.value = result["error"];
+    //data.value = result["error"];
   }
   isLoading.value = false;
 });
