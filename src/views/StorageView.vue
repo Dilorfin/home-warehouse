@@ -5,19 +5,19 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const itemId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
+const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
 const isLoading = ref(true);
-const itemExists = ref(false);
+const storageExists = ref(false);
 const data = ref("");
 
-fetch("/api/GetItem/?id=" + itemId.value).then(async (response: Response)=>{
+fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
 
   isLoading.value = false;
-  itemExists.value = false;
+  storageExists.value = false;
 
   if (!response.bodyUsed)
   {
-    //itemExists.value = true;
+    //storageExists.value = true;
     //data.value = "Якісь данні";
     return;
   }
@@ -25,7 +25,7 @@ fetch("/api/GetItem/?id=" + itemId.value).then(async (response: Response)=>{
   let result = await response.json();
   if (response.ok)
   {
-    itemExists.value = true;
+    storageExists.value = true;
     data.value = result["data"];
   }
   else
@@ -37,7 +37,7 @@ fetch("/api/GetItem/?id=" + itemId.value).then(async (response: Response)=>{
 watch(
   () => route.params.id,
   (newId, oldId) => {
-    itemId.value = Array.isArray(newId) ? newId[0] : newId;
+    storageId.value = Array.isArray(newId) ? newId[0] : newId;
   }
 );*/
 
@@ -49,7 +49,7 @@ watch(
       <div v-if="isLoading" class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
-      <div v-else-if="!itemExists" class="alert alert-primary" role="alert">
+      <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
         No data found
         <a class="btn btn-primary">AAA</a>
       </div>
@@ -60,11 +60,11 @@ watch(
     <div class="col-md order-1 order-md-2">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Item: {{ itemId }}</h3>
+          <h3 class="card-title">{{ $t('labels.storage') }}: {{ storageId }}</h3>
         </div>
         <div class="card-body">
-          <div v-if="itemExists">
-            <qrcode-vue :value="itemId" :size="100"></qrcode-vue>
+          <div v-if="storageExists">
+            <qrcode-vue :value="storageId" :size="100"></qrcode-vue>
           </div>
           <a class="btn btn-outline-primary">{{ $t('buttons.downloadQR') }}</a>
           <a class="btn btn-outline-primary">Print QR</a>

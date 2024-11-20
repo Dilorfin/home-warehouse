@@ -10,6 +10,9 @@ const i18n = createI18n({
     fallbackLocale: 'en',
     messages: {
       en: {
+        labels: {
+          storage: 'Storage'
+        },
         buttons: {
           downloadQR: 'Download QR'
         }
