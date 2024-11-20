@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace api;
 
-public static class UpsertItem
+public static class UpsertStorage
 {
-    [FunctionName("UpsertItem")]
+    [FunctionName("UpsertStorage")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
         ILogger log)
     {
-        var repo = new ItemRepository();
+        var repo = new StorageRepository();
 
         log.LogInformation("C# HTTP trigger function processed a request.");
         

@@ -2,11 +2,10 @@
 
 namespace api;
 
-public record ItemModel
+public record StorageModel
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; init; }
-    [JsonProperty(PropertyName = "data")]
-    public string Data { get; init; }
+    [JsonProperty(PropertyName = "items")]
+    public List<ItemModel> Items { get; init; }
 }
-

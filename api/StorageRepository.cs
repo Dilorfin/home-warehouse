@@ -7,7 +7,7 @@ using Microsoft.Azure.Cosmos.Linq;
  
 namespace api;
 
-public class ItemRepository
+public class StorageRepository
 {
     private static readonly string ConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
@@ -26,9 +26,9 @@ public class ItemRepository
 
     public async Task<bool> ContainsAsync(string id)
     {
-        var queryable = _container.GetItemLinqQueryable<ItemModel>();
+        var queryable = _container.GetItemLinqQueryable<StorageModel>();
         var matches = queryable.Where(e => e.Id == id);
-        using FeedIterator<ItemModel> linqFeed = matches.ToFeedIterator();
+        using FeedIterator<StorageModel> linqFeed = matches.ToFeedIterator();
         while (linqFeed.HasMoreResults)
         {
             var response = await linqFeed.ReadNextAsync();
@@ -37,30 +37,30 @@ public class ItemRepository
         return false;
     }
 
-    public async Task<ItemModel> UpsertAsync(ItemModel item)
+    public async Task<StorageModel> UpsertAsync(StorageModel item)
     {
         await Initialize();
 
         return await _container.UpsertItemAsync(item);
     }
-    public async Task<ItemModel> GetAsync(string id)
+    public async Task<StorageModel> GetAsync(string id)
     {
         await Initialize();
 
         try
         {
-            return await _container.ReadItemAsync<ItemModel>(id, new PartitionKey(id));
+            return await _container.ReadItemAsync<StorageModel>(id, new PartitionKey(id));
         }
         catch (Exception)
         {
             return null;
         }
     }
-    public async Task<ItemModel> DeleteAsync(ItemModel item)
+    public async Task<StorageModel> DeleteAsync(StorageModel item)
     {
         await Initialize();
         
-        return await _container.DeleteItemAsync<ItemModel>(item.Id ,new PartitionKey(item.Id));
+        return await _container.DeleteItemAsync<StorageModel>(item.Id, new PartitionKey(item.Id));
     }
 
     private async Task Initialize()

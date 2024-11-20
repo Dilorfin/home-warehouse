@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace api;
 
-public static class GetItem
+public static class GetStorage
 {
-    [FunctionName("GetItem")]
+    [FunctionName("GetStorage")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
         ILogger log)
     {
-        var repo = new ItemRepository();
+        var repo = new StorageRepository();
 
         log.LogInformation("C# HTTP trigger function processed a request.");
 
