@@ -59,7 +59,9 @@ function openEdit(item:ItemModel)
   itemEditData.value = item;
 }
 function saveEditItem()
-{fetch("/api/GetStorage", {
+{
+  storageData.value.items = storageData.value.items.map(item => item.id == itemEditData.value.id ? itemEditData.value : item);
+  fetch("/api/GetStorage", {
     method: "POST",
     body: JSON.stringify(storageData.value),
   });
