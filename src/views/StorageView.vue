@@ -60,8 +60,8 @@ function openEdit(item:ItemModel)
 }
 function saveEditItem()
 {
-  storageData.value.items = storageData.value.items.map(item => item.id == itemEditData.value.id ? itemEditData.value : item);
-  fetch("/api/GetStorage", {
+  //storageData.value.items = storageData.value.items.map(item => item.id == itemEditData.value.id ? itemEditData.value : item);
+  fetch("/api/UpsertStorage", {
     method: "POST",
     body: JSON.stringify(storageData.value),
   });
