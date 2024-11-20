@@ -10,7 +10,7 @@ const route = useRoute()
 const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
 const isLoading = ref(true);
 const storageExists = ref(false);
-const storageData = ref({ items:[] } as StorageModel);
+const storageData = ref({ items:[] as ItemModel[] } as StorageModel);
 const itemEditData = ref({} as ItemModel); 
 let isNewItem = false;
 fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
