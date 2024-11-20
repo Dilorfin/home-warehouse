@@ -124,12 +124,14 @@ function cancelEdit()
               <td>{{ item.count }}</td>
               <td>{{ item.comment }}</td>
               <td>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button type="button" class="btn btn-outline-danger" @click="removeItem(item, index);">
-                  <i class="bi bi-trash"></i>
-                </button>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-danger" @click="removeItem(item, index);">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
               </td>
             </tr>
           </tbody>
