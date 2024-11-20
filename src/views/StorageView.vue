@@ -10,7 +10,7 @@ const route = useRoute()
 const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
 const isLoading = ref(true);
 const storageExists = ref(false);
-const storageData = ref({} as StorageModel);
+const storageData = ref({ items:[] } as StorageModel);
 const itemEditData = ref({} as ItemModel); 
 let isNewItem = false;
 fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
@@ -64,7 +64,7 @@ function removeItem(item:ItemModel, index:number)
   let sure = confirm("Are you sure to delete '"+item.title+"'?");
   if (sure)
   {
-    storageData.value.items.splice(index, 1)
+    storageData.value.items.splice(index, 1);
     fetch("/api/UpsertStorage", {
       method: "POST",
       body: JSON.stringify(storageData.value),
