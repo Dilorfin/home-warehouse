@@ -11,8 +11,8 @@ const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : 
 const isLoading = ref(true);
 const storageExists = ref(false);
 const storageData = ref({} as StorageModel);
-const itemEditData = ref({} as ItemModel);
-
+const itemEditData = ref({} as ItemModel); 
+let isNewItem = false;
 fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
 
   isLoading.value = false;
@@ -54,12 +54,17 @@ watch(
     storageId.value = Array.isArray(newId) ? newId[0] : newId;
   }
 );*/
-function openEdit(item:ItemModel)
+function openEdit(item:ItemModel | undefined)
 {
-  itemEditData.value = item;
+  isNewItem = !item;
+  itemEditData.value = item ?? {} as ItemModel;
 }
 function saveEditItem()
 {
+  if (isNewItem)
+  {
+    storageData.value.items.push(itemEditData.value);
+  }
   //storageData.value.items = storageData.value.items.map(item => item.id == itemEditData.value.id ? itemEditData.value : item);
   fetch("/api/UpsertStorage", {
     method: "POST",
@@ -69,7 +74,7 @@ function saveEditItem()
 
 function cancelEdit()
 {
-  //itemEditData.value = null;
+  itemEditData.value = {} as ItemModel;
 }
 </script>
 
@@ -94,7 +99,7 @@ function cancelEdit()
               <th scope="col">Count</th>
               <th scope="col">Comment</th>
               <th scope="col">
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
                   Add Item
                 </button>
               </th>
@@ -148,7 +153,7 @@ function cancelEdit()
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text" id="id-modal-addon">ID</span>
-            <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemEditData.id" >
+            <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemEditData.id" disabled>
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="count-modal-addon">Count</span>
@@ -165,7 +170,9 @@ function cancelEdit()
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelEdit">Close</button>
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem"><i class="bi bi-check"></i> Save changes</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem">
+            <i class="bi bi-check"></i> Save changes
+          </button>
         </div>
       </div>
     </div>
