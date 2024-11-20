@@ -66,7 +66,7 @@ watch(
           <div v-if="itemExists">
             <qrcode-vue :value="itemId" :size="100"></qrcode-vue>
           </div>
-          <a class="btn btn-outline-primary">Download QR</a>
+          <a class="btn btn-outline-primary">{{ $t('buttons.downloadQR') }}</a>
           <a class="btn btn-outline-primary">Print QR</a>
         </div>
         
