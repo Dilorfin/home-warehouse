@@ -71,17 +71,17 @@ function removeItem(item:ItemModel, index:number)
     });
   }
 }
-function saveEditItem()
+async function saveEditItem()
 {
   if (isNewItem)
   {
     storageData.value.items.push(itemEditData.value);
   }
-  //storageData.value.items = storageData.value.items.map(item => item.id == itemEditData.value.id ? itemEditData.value : item);
-  fetch("/api/UpsertStorage", {
+  await fetch("/api/UpsertStorage", {
     method: "POST",
     body: JSON.stringify(storageData.value),
   });
+  storageExists.value = true;
 }
 
 function cancelEdit()
