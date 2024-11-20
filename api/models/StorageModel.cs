@@ -7,6 +7,10 @@ public record StorageModel
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; init; }
+
+    [JsonProperty(PropertyName = "description")]
+    public string Description { get; init; }
+
     [JsonProperty(PropertyName = "items")]
     public List<ItemModel> Items { get; init; }
 }

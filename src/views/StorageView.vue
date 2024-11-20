@@ -2,6 +2,7 @@
 import QrcodeVue from 'qrcode.vue';
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router'
+import { StorageModel } from './models/StorageModel.ts'
 
 const route = useRoute()
 
@@ -22,11 +23,11 @@ fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=
     return;
   }
 
-  let result = await response.json();
+  let result = await response.json() as StorageModel;
   if (response.ok)
   {
     storageExists.value = true;
-    data.value = result["data"];
+    data.value = result.description;
   }
   else
   {
