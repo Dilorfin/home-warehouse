@@ -57,7 +57,7 @@ watch(
 function openEdit(item:ItemModel | undefined = undefined)
 {
   isNewItem = !item;
-  itemEditData.value = item ?? {} as ItemModel;
+  itemEditData.value = item ?? { id = crypto.randomUUID() } as ItemModel;
 }
 function saveEditItem()
 {
