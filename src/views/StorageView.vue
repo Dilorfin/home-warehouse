@@ -165,7 +165,7 @@ function cancelEdit()
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelEdit">Close</button>
-          <button type="button" class="btn btn-success" @click="saveEditItem"><i class="bi bi-check"></i> Save changes</button>
+          <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem"><i class="bi bi-check"></i> Save changes</button>
         </div>
       </div>
     </div>
