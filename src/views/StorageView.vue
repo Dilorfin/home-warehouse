@@ -67,7 +67,7 @@ function saveEditItem()
 
 function cancelEdit()
 {
-  itemEditData.value = null;
+  //itemEditData.value = null;
 }
 </script>
 
