@@ -54,7 +54,10 @@ watch(
     storageId.value = Array.isArray(newId) ? newId[0] : newId;
   }
 );*/
-
+function openEdit(item:ItemModel)
+{
+  itemEditData.value = item;
+}
 </script>
 
 <template>
@@ -91,7 +94,7 @@ watch(
               <td>{{ item.count }}</td>
               <td>{{ item.comment }}</td>
               <td>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
                   Edit
                 </button>
               </td>

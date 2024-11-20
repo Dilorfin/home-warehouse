@@ -3,7 +3,11 @@ import type { StorageModel, ItemModel } from '@/models/StorageModel';
 
 const storageData = defineModel<StorageModel>('storageData');
 const itemData = defineModel<ItemModel>('itemData');
-
+if (!itemData)
+{
+  itemData.value = new ItemModel();
+  itemData.value.id = "aaa?";
+}
 console.log(itemData.id);
 </script>
 
