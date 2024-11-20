@@ -15,13 +15,6 @@ const storageData = ref({} as StorageModel);
 fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
 
   isLoading.value = false;
-  storageExists.value = false;
-  console.log(response);
-  console.log(await response.json());
-  if (!response.bodyUsed)
-  {
-    return;
-  }
 
   /* storageData.value = {
     id: 'thisisid',
@@ -49,6 +42,7 @@ fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=
   }
   else
   {
+    storageExists.value = false;
     //data.value = result["error"];
   }
 });
