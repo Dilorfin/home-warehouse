@@ -99,7 +99,7 @@ function cancelEdit()
       <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
         No data found
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
-          {{ $t('buttons.addItem') }}
+          <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
         </button>
       </div>
       <div v-else>
@@ -112,7 +112,7 @@ function cancelEdit()
               <th scope="col">{{ $t('labels.comment') }}</th>
               <th scope="col">
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
-                  <i class="bi bi-plus-lg"></i>{{ $t('buttons.addItem') }}
+                  <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
                 </button>
               </th>
             </tr>
@@ -141,10 +141,12 @@ function cancelEdit()
     <div class="col-md order-1 order-md-2">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">{{ $t('labels.storage') }}: {{ storageId }}</h3>
-          <button type="button" class="btn btn-outline-primary">
-            <i class="bi bi-pencil"></i>
-          </button>
+          <div class="d-inline-block">
+            <h3 class="card-title">{{ $t('labels.storage') }}: {{ storageId }}</h3>
+            <button type="button" class="btn btn-outline-primary">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
         </div>
         <div class="card-body">
           {{  storageData.description  }}
@@ -190,10 +192,10 @@ function cancelEdit()
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="cancelEdit">
-            <i class="bi bi-x-lg"></i>{{ $t('labels.cancel') }}
+            <i class="bi bi-x-lg"></i> {{ $t('labels.cancel') }}
           </button>
           <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem">
-            <i class="bi bi-floppy2-fill"></i>{{ $t('labels.save') }}
+            <i class="bi bi-floppy2-fill"></i> {{ $t('labels.save') }}
           </button>
         </div>
       </div>
