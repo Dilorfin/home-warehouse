@@ -45,7 +45,7 @@ watch(
 
 <template>
   <div class="row">
-    <div class="col-8">
+    <div class="col-md-8 order-2 order-md-1">
       <div v-if="isLoading" class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -57,7 +57,7 @@ watch(
         {{ data }}
       </div>
     </div>
-    <div class="col">
+    <div class="col-md order-1 order-md-2">
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">Item: {{ itemId }}</h3>
