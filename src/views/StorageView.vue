@@ -16,7 +16,7 @@ fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=
 
   isLoading.value = false;
   storageExists.value = false;
-
+  console.log(response);
   if (!response.bodyUsed)
   {
     return;
