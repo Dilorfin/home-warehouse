@@ -21,7 +21,7 @@ public static class UpsertStorage
         log.LogInformation("C# HTTP trigger function processed a request.");
         
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        var data = JsonConvert.DeserializeObject<ItemModel>(requestBody);
+        var data = JsonConvert.DeserializeObject<StorageModel>(requestBody);
 
         return new OkObjectResult(await repo.UpsertAsync(data));
     }
