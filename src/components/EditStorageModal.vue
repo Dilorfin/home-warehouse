@@ -3,12 +3,12 @@ import type { StorageModel, ItemModel } from '@/models/StorageModel';
 
 const storageData = defineModel<StorageModel>('storageData');
 const itemData = defineModel<ItemModel>('itemData');
+var tempItemData:ItemModel = itemData ?? new ItemModel();
 if (!itemData)
 {
-  itemData.value = new ItemModel();
-  itemData.value.id = "aaa?";
+  tempItemData.id = "aaa?";
 }
-console.log(itemData.id);
+console.log(tempItemData.id);
 </script>
 
 <template>
@@ -22,19 +22,19 @@ console.log(itemData.id);
         <div class="modal-body">
           <div class="input-group mb-3">
             <span class="input-group-text" id="id-modal-addon">ID</span>
-            <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemData.id" >
+            <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="tempItemData.id" >
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="count-modal-addon">Count</span>
-            <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="itemData.count">
+            <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="tempItemData.count">
           </div>
           <div class="input-group mb-3">
             <span class="input-group-text" id="title-modal-addon">Title</span>
-            <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="itemData.title">
+            <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="tempItemData.title">
           </div>
           <div class="input-group">
             <span class="input-group-text">Comment</span>
-            <textarea class="form-control" v-model="itemData.comment"></textarea>
+            <textarea class="form-control" v-model="tempItemData.comment"></textarea>
           </div>
         </div>
         <div class="modal-footer">
