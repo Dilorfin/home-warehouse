@@ -18,7 +18,8 @@ const i18n = createI18n({
           count: 'Count',
           comment: 'Comment',
           editItem: 'Edit Item',
-          loading: 'Loading...'
+          loading: 'Loading...',
+          noDataFound: 'No items found'
         },
         buttons: {
           addItem: 'Add Item',

@@ -97,10 +97,12 @@ function cancelEdit()
         <span class="visually-hidden">{{ $t('labels.loading') }}</span>
       </div>
       <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
-        No data found
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
-          <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
-        </button>
+        <div class="d-flex justify-content-between">
+          <span>{{ $t('labels.noDataFound') }}</span>
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
+            <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
+          </button>
+        </div>
       </div>
       <div v-else>
         <table class="table table-bordered">
@@ -142,10 +144,15 @@ function cancelEdit()
       <div class="card">
         <div class="card-header">
           <div class="d-inline-block">
-            <h3 class="card-title">{{ $t('labels.storage') }}: {{ storageId }}</h3>
-            <button type="button" class="btn btn-outline-primary">
-              <i class="bi bi-pencil"></i>
-            </button>
+            <h3>{{ $t('labels.storage') }}: {{ storageId }}</h3>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-primary">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button type="button" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
           </div>
         </div>
         <div class="card-body">
