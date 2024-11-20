@@ -12,7 +12,7 @@ public class StorageRepository
     private static readonly string ConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
 
     private const string DatabaseId = "home-warehouse";
-    private const string ContainerId = "items";
+    private const string ContainerId = "storages";
     private const string PartitionKey = "/id";
     
     // The Cosmos client instance
