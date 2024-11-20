@@ -59,8 +59,7 @@ function openEdit(item:ItemModel)
   itemEditData.value = item;
 }
 function saveEditItem()
-{
-  const response = await fetch("/api/GetStorage", {
+{fetch("/api/GetStorage", {
     method: "POST",
     body: JSON.stringify(storageData.value),
   });
