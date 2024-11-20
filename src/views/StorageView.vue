@@ -54,7 +54,7 @@ watch(
     storageId.value = Array.isArray(newId) ? newId[0] : newId;
   }
 );*/
-function openEdit(item:ItemModel | undefined)
+function openEdit(item:ItemModel | undefined = undefined)
 {
   isNewItem = !item;
   itemEditData.value = item ?? {} as ItemModel;
