@@ -11,15 +11,23 @@ const i18n = createI18n({
     messages: {
       en: {
         labels: {
-          storage: 'Storage'
+          save: 'Save',
+          cancel: 'Cancel',
+          storage: 'Storage',
+          title: 'Title',
+          count: 'Count',
+          comment: 'Comment',
+          editItem: 'Edit Item',
+          loading: 'Loading...'
         },
         buttons: {
+          addItem: 'Add Item',
           downloadQR: 'Download QR'
         }
       },
       ua: {
         buttons: {
-            downloadQR: 'Завантажити QR'
+          downloadQR: 'Завантажити QR'
         }
       }
     }

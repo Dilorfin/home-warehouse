@@ -94,32 +94,32 @@ function cancelEdit()
   <div class="row mt-2">
     <div class="col-md-8 order-2 order-md-1">
       <div v-if="isLoading" class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+        <span class="visually-hidden">{{ $t('labels.loading') }}</span>
       </div>
       <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
         No data found
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
-          Add Item
+          {{ $t('buttons.addItem') }}
         </button>
       </div>
       <div v-else>
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Count</th>
-              <th scope="col">Comment</th>
+              <!--<th scope="col">#</th>-->
+              <th scope="col">{{ $t('labels.title') }}</th>
+              <th scope="col">{{ $t('labels.count') }}</th>
+              <th scope="col">{{ $t('labels.comment') }}</th>
               <th scope="col">
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
-                  Add Item
+                  <i class="bi bi-plus-lg"></i>{{ $t('buttons.addItem') }}
                 </button>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, index) in storageData.items">
-              <th scope="row">{{ item.id }}</th>
+              <!--<th scope="row">{{ item.id }}</th>-->
               <td>{{ item.title }}</td>
               <td>{{ item.count }}</td>
               <td>{{ item.comment }}</td>
@@ -127,7 +127,7 @@ function cancelEdit()
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="removeItem(item, index);">
+                <button type="button" class="btn btn-outline-danger" @click="removeItem(item, index);">
                   <i class="bi bi-trash"></i>
                 </button>
               </td>
@@ -140,6 +140,9 @@ function cancelEdit()
       <div class="card">
         <div class="card-header">
           <h3 class="card-title">{{ $t('labels.storage') }}: {{ storageId }}</h3>
+          <button type="button" class="btn btn-outline-primary">
+            <i class="bi bi-pencil"></i>
+          </button>
         </div>
         <div class="card-body">
           {{  storageData.description  }}
@@ -162,7 +165,7 @@ function cancelEdit()
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit item</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $t('labels.editItem') }}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -171,22 +174,24 @@ function cancelEdit()
             <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemEditData.id" disabled>
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="count-modal-addon">Count</span>
+            <span class="input-group-text" id="count-modal-addon">{{ $t('labels.count') }}</span>
             <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="itemEditData.count">
           </div>
           <div class="input-group mb-3">
-            <span class="input-group-text" id="title-modal-addon">Title</span>
+            <span class="input-group-text" id="title-modal-addon">{{ $t('labels.title') }}</span>
             <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="itemEditData.title">
           </div>
           <div class="input-group">
-            <span class="input-group-text">Comment</span>
+            <span class="input-group-text">{{ $t('labels.comment') }}</span>
             <textarea class="form-control" v-model="itemEditData.comment"></textarea>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelEdit">Close</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="cancelEdit">
+            <i class="bi bi-x-lg"></i>{{ $t('labels.cancel') }}
+          </button>
           <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem">
-            <i class="bi bi-check"></i> Save changes
+            <i class="bi bi-floppy2-fill"></i>{{ $t('labels.save') }}
           </button>
         </div>
       </div>
