@@ -59,6 +59,18 @@ function openEdit(item:ItemModel | undefined = undefined)
   isNewItem = !item;
   itemEditData.value = item ?? { id = crypto.randomUUID() } as ItemModel;
 }
+function removeItem(item:ItemModel, index:number)
+{
+  let sure = confirm("Are you sure to delete '"+item.title+"'?");
+  if (sure)
+  {
+    storageData.value.items.splice(index, 1)
+    fetch("/api/UpsertStorage", {
+      method: "POST",
+      body: JSON.stringify(storageData.value),
+    });
+  }
+}
 function saveEditItem()
 {
   if (isNewItem)
@@ -86,7 +98,7 @@ function cancelEdit()
       </div>
       <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
         No data found
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
           Add Item
         </button>
       </div>
@@ -106,14 +118,17 @@ function cancelEdit()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in storageData.items">
+            <tr v-for="(item, index) in storageData.items">
               <th scope="row">{{ item.id }}</th>
               <td>{{ item.title }}</td>
               <td>{{ item.count }}</td>
               <td>{{ item.comment }}</td>
               <td>
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
-                  Edit
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="removeItem(item, index);">
+                  <i class="bi bi-trash"></i>
                 </button>
               </td>
             </tr>
