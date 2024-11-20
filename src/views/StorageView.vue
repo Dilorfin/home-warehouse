@@ -58,6 +58,18 @@ function openEdit(item:ItemModel)
 {
   itemEditData.value = item;
 }
+function saveEditItem()
+{
+  const response = await fetch("/api/GetStorage", {
+    method: "POST",
+    body: JSON.stringify(storageData.value),
+  });
+}
+
+function cancelEdit()
+{
+  itemEditData.value = null;
+}
 </script>
 
 <template>
@@ -151,8 +163,8 @@ function openEdit(item:ItemModel)
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success"><i class="bi bi-check"></i> Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cancelEdit">Close</button>
+          <button type="button" class="btn btn-success" @click="saveEditItem"><i class="bi bi-check"></i> Save changes</button>
         </div>
       </div>
     </div>
