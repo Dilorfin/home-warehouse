@@ -1,5 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+
+function setLocale(locale:string)
+{
+  localStorage.setItem('lang', locale);
+}
 </script>
 
 <template>
@@ -16,7 +21,7 @@ import { RouterLink, RouterView } from 'vue-router'
             </button>
             <ul class="dropdown-menu">
               <li v-for="locale in $i18n.availableLocales">
-                <a class="dropdown-item" @click="$i18n.locale = locale; localStorage.setItem("lang", locale);">
+                <a class="dropdown-item" @click="$i18n.locale = locale; setLocale(locale)">
                   {{ $t('language.' + locale) }}
                 </a>
               </li>
