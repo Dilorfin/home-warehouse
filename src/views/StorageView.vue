@@ -2,8 +2,8 @@
 import type { StorageModel, ItemModel } from '@/models/StorageModel';
 
 import QrcodeVue from 'qrcode.vue';
-import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { ref, watch } from 'vue';
 
 const route = useRoute()
 
@@ -59,13 +59,13 @@ function openEdit(item:ItemModel | undefined = undefined)
   isNewItem = !item;
   itemEditData.value = item ?? { id: crypto.randomUUID() } as ItemModel;
 }
-function removeItem(item:ItemModel, index:number)
+async function removeItem(item:ItemModel, index:number)
 {
   let sure = confirm("Are you sure to delete '"+item.title+"'?");
   if (sure)
   {
     storageData.value.items.splice(index, 1);
-    fetch("/api/UpsertStorage", {
+    await fetch("/api/UpsertStorage", {
       method: "POST",
       body: JSON.stringify(storageData.value),
     });

@@ -1,4 +1,4 @@
-export interface ItemModel
+export declare interface ItemModel
 {
     id : string
     count : number
@@ -6,7 +6,7 @@ export interface ItemModel
     comment : string
 }
 
-export interface StorageModel
+export declare interface StorageModel
 {
     id : string
     description : string

@@ -10,7 +10,13 @@ const i18n = createI18n({
     fallbackLocale: 'en',
     messages: {
       en: {
+        language:{
+          ua: 'Українська 🇺🇦',
+          en: 'English 🇬🇧'
+        },
         labels: {
+          scanQR: 'Scan QR',
+          openStorage: 'Open Storage',
           save: 'Save',
           cancel: 'Cancel',
           storage: 'Storage',
@@ -22,12 +28,15 @@ const i18n = createI18n({
           noDataFound: 'No items found'
         },
         buttons: {
+          scanQR: 'Scan QR',
+          openStorage: 'Open',
           addItem: 'Add Item',
           downloadQR: 'Download QR'
         }
       },
       ua: {
         buttons: {
+          scanQR: 'Сканувати QR',
           downloadQR: 'Завантажити QR'
         }
       }
