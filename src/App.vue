@@ -13,6 +13,7 @@ function setLocale(locale:string)
       <div class="container-fluid">
         <div class="navbar-brand">
           <RouterLink to="/" class="nav-link active">Open Storage</RouterLink>
+          <RouterLink to="/storages" class="nav-link active">Storages List</RouterLink>
         </div>
         <div class="d-flex">
           <div class="dropdown">

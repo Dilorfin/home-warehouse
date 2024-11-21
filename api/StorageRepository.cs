@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
@@ -43,6 +43,19 @@ public class StorageRepository
 
         return await _container.UpsertItemAsync(item);
     }
+    public async Task<List<StorageModel>> GetAllAsync()
+    {
+        await Initialize();
+
+        try
+        {
+            return await FetchAllItemsAsync();
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
     public async Task<StorageModel> GetAsync(string id)
     {
         await Initialize();
@@ -67,5 +80,18 @@ public class StorageRepository
     {
         _database ??= await _cosmosClient.CreateDatabaseIfNotExistsAsync(DatabaseId);
         _container ??= await _database.CreateContainerIfNotExistsAsync(ContainerId, PartitionKey);
+    }
+    private async Task<List<StorageModel>> FetchAllItemsAsync()
+    {
+        using var resultSetIterator = _container.GetItemQueryIterator<StorageModel>();
+        
+        var items = new List<StorageModel>();
+        while (resultSetIterator.HasMoreResults)
+        {
+            var response = await resultSetIterator.ReadNextAsync();
+            items.AddRange(response);
+        }
+
+        return items;
     }
 }
