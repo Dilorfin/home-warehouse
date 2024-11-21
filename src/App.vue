@@ -16,7 +16,9 @@ import { RouterLink, RouterView } from 'vue-router'
             </button>
             <ul class="dropdown-menu">
               <li v-for="locale in $i18n.availableLocales">
-                <a class="dropdown-item" @click="$i18n.locale = locale">{{ $t('language.' + locale) }}</a>
+                <a class="dropdown-item" @click="$i18n.locale = locale; localStorage.setItem("lang", locale);">
+                  {{ $t('language.' + locale) }}
+                </a>
               </li>
             </ul>
           </div>
