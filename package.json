@@ -12,8 +12,10 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@html2canvas/html2canvas": "^1.6.3",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "print-js": "^1.6.0",
     "qrcode.vue": "^3.6.0",
     "vue": "^3.5.12",
     "vue-i18n": "^10.0.4",

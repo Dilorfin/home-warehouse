@@ -4,13 +4,17 @@ import EditStorageModal from '@/components/EditStorageModal.vue'
 import QrcodeVue from 'qrcode.vue';
 import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
+import html2canvas from '@html2canvas/html2canvas';
+import printJS from 'print-js';
 
 const route = useRoute()
 
 const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
 const isLoading = ref(true);
 
-const storageData = ref({} as StorageModel);
+const qrReference = ref<HTMLElement>();
+
+const storageData = ref({items:[] as ItemModel[] } as StorageModel);
 const itemEditData = ref({} as ItemModel); 
 let isNewItem = false;
 
@@ -52,6 +56,35 @@ async function OpenStorage()
 
 OpenStorage();
 
+async function printQR()
+{
+  const canvas:HTMLCanvasElement = await html2canvas(qrReference.value!, {
+    onclone: (_, element) => element.removeAttribute("hidden")
+  });
+  canvas.toBlob((blob:Blob|null) => {
+    const url = URL.createObjectURL(blob!);
+    printJS({
+      printable: url,
+      type: 'image',
+      onPrintDialogClose: () => URL.revokeObjectURL(url)
+    });
+  });
+}
+async function downloadQR()
+{
+  const canvas:HTMLCanvasElement = await html2canvas(qrReference.value!, {
+    onclone: (_, element) => element.removeAttribute("hidden")
+  });
+  canvas.toBlob((blob:Blob|null) => {
+    const url = URL.createObjectURL(blob!);
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = storageId.value+".png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+}
 watch(
   () => route.params.id,
   async (newId, oldId) => {
@@ -172,9 +205,13 @@ async function removeItem(item:ItemModel, index:number)
               <qrcode-vue :value="storageId" :size="100" level="Q"></qrcode-vue>
             </div>
             <div class="btn-group-vertical px-1" role="group" aria-label="Vertical button group">
-              <a class="btn btn-outline-primary">{{ $t('buttons.downloadQR') }}</a>
-              <a class="btn btn-outline-primary">Print QR</a>
+              <a class="btn btn-outline-primary" @click="downloadQR()">{{ $t('buttons.downloadQR') }}</a>
+              <a class="btn btn-outline-primary" @click="printQR()">Print QR</a>
             </div>
+          </div>
+          <div ref="qrReference" class="text-center" hidden>
+            <h3>{{ storageId }}</h3>
+            <qrcode-vue :value="storageId" :size="300" level="Q"></qrcode-vue>
           </div>
         </div>
       </div>
