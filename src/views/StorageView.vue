@@ -20,7 +20,7 @@ async function OpenStorage()
   storageExists.value = false;
   isLoading.value = false;
 
-  storageExists.value = true;
+  /*storageExists.value = true;
   storageData.value = {
     id: 'thisisid',
     description: 'Description',
@@ -39,7 +39,7 @@ async function OpenStorage()
         comment: 'comment 2 field'
       }
     ]
-  } as StorageModel;
+  } as StorageModel;*/
   
   if (response.ok)
   {
