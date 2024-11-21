@@ -10,5 +10,6 @@ export declare interface StorageModel
 {
     id : string
     description : string
+    placement : string
     items : ItemModel[]
 }

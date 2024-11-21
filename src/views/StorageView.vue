@@ -13,13 +13,18 @@ const storageExists = ref(false);
 const storageData = ref({ id: storageId.value, items:[] as ItemModel[] } as StorageModel);
 const itemEditData = ref({} as ItemModel); 
 let isNewItem = false;
-fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=>{
 
+async function OpenStorage()
+{
+  let response: Response = await fetch("/api/GetStorage/?id=" + storageId.value);
+  storageExists.value = false;
   isLoading.value = false;
 
-  /* storageData.value = {
+  storageExists.value = true;
+  storageData.value = {
     id: 'thisisid',
     description: 'Description',
+    placement: "placement asd",
     items: [
       {
         id: 'AAAA',
@@ -35,25 +40,23 @@ fetch("/api/GetStorage/?id=" + storageId.value).then(async (response: Response)=
       }
     ]
   } as StorageModel;
-  */
+  
   if (response.ok)
   {
     storageExists.value = true;
     storageData.value = await response.json() as StorageModel;
   }
-  else
-  {
-    storageExists.value = false;
-    //data.value = result["error"];
-  }
-});
-/* ???
+}
+
+OpenStorage();
+
 watch(
   () => route.params.id,
-  (newId, oldId) => {
+  async (newId, oldId) => {
     storageId.value = Array.isArray(newId) ? newId[0] : newId;
+    await OpenStorage();
   }
-);*/
+);
 function openEdit(item:ItemModel | undefined = undefined)
 {
   isNewItem = !item;
@@ -91,7 +94,7 @@ function cancelEdit()
 </script>
 
 <template>
-  <div class="row mt-2">
+  <div class="row">
     <div class="col-md-8 order-2 order-md-1">
       <div v-if="isLoading" class="spinner-border text-primary" role="status">
         <span class="visually-hidden">{{ $t('labels.loading') }}</span>
@@ -143,22 +146,42 @@ function cancelEdit()
     <div class="col-md order-1 order-md-2">
       <div class="card">
         <div class="card-header">
-          <div class="d-inline-block">
-            <h3>{{ $t('labels.storage') }}: {{ storageId }}</h3>
-            <div class="btn-group" role="group">
+          <h3>{{ $t('labels.storage') }}: {{ storageId }}</h3>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li v-if="storageData.description" class="list-group-item">
+            <i>Description:</i>
+            <div>{{ storageData.description }}</div>
+          </li>
+          <li v-else class="list-group-item">
+            <i>No description</i>
+          </li>
+          <li v-if="storageData.placement" class="list-group-item">
+            <i>Placement:</i> {{ storageData.placement }}
+          </li>
+          <li v-else class="list-group-item">
+            <i>No placement</i>
+          </li>
+        </ul>
+        <div class="card-footer">
+          <div class="btn-group" role="group">
               <button type="button" class="btn btn-outline-primary">
                 <i class="bi bi-pencil"></i>
               </button>
               <button type="button" class="btn btn-outline-danger">
                 <i class="bi bi-trash"></i>
               </button>
+              <button type="button" class="btn btn-outline-secondary">
+                <i class="bi bi-cloud-download"></i>
+              </button>
+              <button type="button" class="btn btn-outline-secondary">
+                <i class="bi bi-cloud-upload"></i>
+              </button>
             </div>
-          </div>
         </div>
+      </div>
+      <div class="card mt-2">
         <div class="card-body">
-          {{  storageData.description  }}
-        </div>
-        <div class="card-footer">
           <div class="d-flex">
             <div class="px-1">
               <qrcode-vue :value="storageId" :size="100"></qrcode-vue>
