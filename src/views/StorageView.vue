@@ -101,16 +101,24 @@ function openEdit(item:ItemModel | undefined = undefined)
 async function removeItem(item:ItemModel, index:number)
 {
   let sure = confirm("Are you sure to delete '"+item.title+"'?");
-  if (sure)
-  {
-    storageData.value.items.splice(index, 1);
-    await fetch("/api/UpsertStorage", {
-      method: "POST",
-      body: JSON.stringify(storageData.value),
-    });
-  }
+  if (!sure) return;
+  
+  storageData.value.items.splice(index, 1);
+  await fetch("/api/UpsertStorage", {
+    method: "POST",
+    body: JSON.stringify(storageData.value),
+  });
 }
-
+async function DeleteStorage()
+{
+  let sure = confirm("Are you sure to delete '"+storageId.value+"'?");
+  if (!sure) return;
+  
+  let response: Response =await fetch("/api/DeleteStorage", {
+    method: "DELETE",
+    body: JSON.stringify(storageData.value),
+  });
+}
 </script>
 
 <template>
@@ -186,7 +194,7 @@ async function removeItem(item:ItemModel, index:number)
               <button type="button" class="btn btn-outline-primary">
                 <i class="bi bi-pencil"></i>
               </button>
-              <button type="button" class="btn btn-outline-danger">
+              <button type="button" class="btn btn-outline-danger" @click="DeleteStorage()">
                 <i class="bi bi-trash"></i>
               </button>
               <button type="button" class="btn btn-outline-secondary">

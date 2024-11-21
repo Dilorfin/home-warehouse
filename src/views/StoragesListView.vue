@@ -20,6 +20,17 @@ async function GetStorages()
   }
 }
 
+async function DeleteStorage(storage:StorageModel)
+{
+  let sure = confirm("Are you sure to delete '"+storage.id+"'?");
+  if (!sure) return;
+
+  let response: Response =await fetch("/api/DeleteStorage", {
+    method: "DELETE",
+    body: JSON.stringify(storage),
+  });
+}
+
 </script>
 
 <template>
@@ -37,12 +48,12 @@ async function GetStorages()
         <table class="table table-bordered">
           <thead>
             <tr>
-              <th scope="col">{{ $t('labels.title') }}</th>
-              <th scope="col">{{ $t('labels.count') }}</th>
-              <th scope="col">{{ $t('labels.comment') }}</th>
+              <th scope="col">ID</th>
+              <th scope="col">Description</th>
+              <th scope="col">Placement</th>
               <th scope="col">
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal">
-                  <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
+                  <i class="bi bi-plus-lg"></i> Add Storage
                 </button>
               </th>
             </tr>
@@ -54,10 +65,11 @@ async function GetStorages()
               <td>{{ item.placement }}</td>
               <td>
                 <div class="btn-group" role="group">
+                  <RouterLink :to="'/storage/'+item.id" class="btn btn-outline-primary">Open</RouterLink>
                   <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal">
                     <i class="bi bi-pencil"></i>
                   </button>
-                  <button type="button" class="btn btn-outline-danger">
+                  <button type="button" class="btn btn-outline-danger" @click="DeleteStorage(item)">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
