@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { StorageModel, ItemModel } from '@/models/StorageModel';
-
+import EditStorageModal from '@/components/EditStorageModal.vue'
 import QrcodeVue from 'qrcode.vue';
 import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
@@ -9,19 +9,18 @@ const route = useRoute()
 
 const storageId = ref(Array.isArray(route?.params?.id) ? route?.params?.id[0] : route?.params?.id);
 const isLoading = ref(true);
-const storageExists = ref(false);
-const storageData = ref({ id: storageId.value, items:[] as ItemModel[] } as StorageModel);
+
+const storageData = ref({} as StorageModel);
 const itemEditData = ref({} as ItemModel); 
 let isNewItem = false;
 
 async function OpenStorage()
 {
   let response: Response = await fetch("/api/GetStorage/?id=" + storageId.value);
-  storageExists.value = false;
+
   isLoading.value = false;
 
-  /*storageExists.value = true;
-  storageData.value = {
+  /*storageData.value = {
     id: 'thisisid',
     description: 'Description',
     placement: "placement asd",
@@ -43,8 +42,11 @@ async function OpenStorage()
   
   if (response.ok)
   {
-    storageExists.value = true;
     storageData.value = await response.json() as StorageModel;
+  }
+  else 
+  {
+    storageData.value = { id: storageId.value, items:[] as ItemModel[] } as StorageModel;
   }
 }
 
@@ -57,6 +59,7 @@ watch(
     await OpenStorage();
   }
 );
+
 function openEdit(item:ItemModel | undefined = undefined)
 {
   isNewItem = !item;
@@ -74,23 +77,7 @@ async function removeItem(item:ItemModel, index:number)
     });
   }
 }
-async function saveEditItem()
-{
-  if (isNewItem)
-  {
-    storageData.value.items.push(itemEditData.value);
-  }
-  await fetch("/api/UpsertStorage", {
-    method: "POST",
-    body: JSON.stringify(storageData.value),
-  });
-  storageExists.value = true;
-}
 
-function cancelEdit()
-{
-  itemEditData.value = {} as ItemModel;
-}
 </script>
 
 <template>
@@ -99,10 +86,10 @@ function cancelEdit()
       <div v-if="isLoading" class="spinner-border text-primary" role="status">
         <span class="visually-hidden">{{ $t('labels.loading') }}</span>
       </div>
-      <div v-else-if="!storageExists" class="alert alert-primary" role="alert">
+      <div v-else-if="storageData.items.length <= 0 " class="alert alert-primary" role="alert">
         <div class="d-flex justify-content-between">
           <span>{{ $t('labels.noDataFound') }}</span>
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit();">
             <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
           </button>
         </div>
@@ -111,12 +98,11 @@ function cancelEdit()
         <table class="table table-bordered">
           <thead>
             <tr>
-              <!--<th scope="col">#</th>-->
               <th scope="col">{{ $t('labels.title') }}</th>
               <th scope="col">{{ $t('labels.count') }}</th>
               <th scope="col">{{ $t('labels.comment') }}</th>
               <th scope="col">
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit();">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit();">
                   <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
                 </button>
               </th>
@@ -124,13 +110,12 @@ function cancelEdit()
           </thead>
           <tbody>
             <tr v-for="(item, index) in storageData.items">
-              <!--<th scope="row">{{ item.id }}</th>-->
               <td>{{ item.title }}</td>
               <td>{{ item.count }}</td>
               <td>{{ item.comment }}</td>
               <td>
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="openEdit(item);">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit(item);">
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button type="button" class="btn btn-outline-danger" @click="removeItem(item, index);">
@@ -184,7 +169,7 @@ function cancelEdit()
         <div class="card-body">
           <div class="d-flex">
             <div class="px-1">
-              <qrcode-vue :value="storageId" :size="100"></qrcode-vue>
+              <qrcode-vue :value="storageId" :size="100" level="Q"></qrcode-vue>
             </div>
             <div class="btn-group-vertical px-1" role="group" aria-label="Vertical button group">
               <a class="btn btn-outline-primary">{{ $t('buttons.downloadQR') }}</a>
@@ -195,42 +180,7 @@ function cancelEdit()
       </div>
     </div>
   </div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $t('labels.editItem') }}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="id-modal-addon">ID</span>
-            <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemEditData.id" disabled>
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="count-modal-addon">{{ $t('labels.count') }}</span>
-            <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="itemEditData.count">
-          </div>
-          <div class="input-group mb-3">
-            <span class="input-group-text" id="title-modal-addon">{{ $t('labels.title') }}</span>
-            <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="itemEditData.title">
-          </div>
-          <div class="input-group">
-            <span class="input-group-text">{{ $t('labels.comment') }}</span>
-            <textarea class="form-control" v-model="itemEditData.comment"></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="cancelEdit">
-            <i class="bi bi-x-lg"></i> {{ $t('labels.cancel') }}
-          </button>
-          <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveEditItem">
-            <i class="bi bi-floppy2-fill"></i> {{ $t('labels.save') }}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <EditStorageModal :modal-id="'edit-storage-modal'" :is-new-item="isNewItem" v-model:item="itemEditData" v-model:storage="storageData"></EditStorageModal>
 </template>
 
 <style scoped>
