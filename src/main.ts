@@ -6,7 +6,7 @@ import App from './App.vue'
 import router from './router'
 
 const i18n = createI18n({
-    locale: 'ua',
+    locale: window.navigator.language.slice(0, 2),
     fallbackLocale: 'en',
     messages: {
       en: {
