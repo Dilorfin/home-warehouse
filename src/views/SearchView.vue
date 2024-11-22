@@ -6,17 +6,22 @@ const isLoading = ref(true);
 const searchText = ref('');
 
 const storagesData = ref([] as StorageModel[]);
-const filteredData = ref([] as StorageModel[]);
+const filteredStoragesData = ref([] as StorageModel[]);
+const filteredItemsData = ref<{id : string
+    storageId : string
+    title : string
+    comment : string,
+    count: number}[]>([]);
+
 const tab = ref<'storages'|'items'>('storages');
 
 GetStorages();
 
 async function GetStorages()
 {
-  let response: Response = await fetch("/api/GetStoragesList");
-
   isLoading.value = false;
 
+  let response: Response = await fetch("/api/GetStoragesList");
   if (response.ok)
   {
     storagesData.value = await response.json() as StorageModel[];
@@ -25,25 +30,42 @@ async function GetStorages()
   {
     storagesData.value = [];
   }
-  filteredData.value = storagesData.value;
+  search();
 }
-function getItemsList()
-{
-  return filteredData.value.map(s => s.items.map(i => ({ storageId: s.id, itemId: i.id, title: i.title, count: i.count }))).flat();
-}
+
 function search()
 {
   if (!searchText.value)
   {
-    filteredData.value = storagesData.value;
+    filteredStoragesData.value = storagesData.value;
+    filteredItemsData.value = storagesData.value.map(sd => sd.items.map(it => {
+      return {
+        id: it.id,
+        storageId: sd.id,
+        title: it.title,
+        comment: it.comment,
+        count: it.count
+    }
+    })).flat();
     return;
   }
-  filteredData.value = storagesData.value.filter(storage => 
-    storage.description.search(searchText.value) > 0
-    || storage.id.search(searchText.value) > 0
-    || storage.placement.search(searchText.value) > 0
-    || storage.items.some(it => it.id.search(searchText.value) > 0 || it.title.search(searchText.value) > 0 || it.comment.search(searchText.value) > 0)
-  );
+  filteredStoragesData.value = storagesData.value.filter(storage => 
+    storage.description?.search(searchText.value) >= 0
+    || storage.id?.search(searchText.value) >= 0
+    || storage.placement?.search(searchText.value) >= 0);
+
+  filteredItemsData.value = storagesData.value.map(sd => sd.items.map(it => {
+      return {
+        id: it.id,
+        storageId: sd.id,
+        title: it.title,
+        comment: it.comment,
+        count: it.count
+    }
+    })).flat()
+    .filter(it => it.id?.search(searchText.value) >= 0
+      || it.title?.search(searchText.value) >= 0
+      || it.comment?.search(searchText.value) >= 0);
 }
 </script>
 
@@ -83,7 +105,7 @@ function search()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in filteredData">
+            <tr v-for="(item, index) in filteredStoragesData">
               <td>{{ item.id }}</td>
               <td>{{ item.description }}</td>
               <td>{{ item.placement }}</td>
@@ -99,7 +121,7 @@ function search()
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item, index) in getItemsList()">
+            <tr v-for="(item, index) in filteredItemsData">
               <td>{{ item.storageId }}</td>
               <td>{{ item.title }}</td>
               <td>{{ item.count }}</td>
