@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import type { StorageModel } from '@/models/StorageModel';
+import type { StorageModel, ItemModel } from '@/models/StorageModel';
 import { watch } from 'vue';
 
+const itemEditData = defineModel<ItemModel>('item', { required: true });
 const storageData = defineModel<StorageModel>('storage', { required: true });
 
 let saveForCancel = JSON.stringify(storageData.value);
 watch(storageData, (value, old)=>{
   saveForCancel = JSON.stringify(value);
 });
+
 const props = defineProps({
-  modalId: String,
-  storageId: String
+  isNewItem: Boolean,
+  modalId: String
 });
 
 async function saveEditItem()
 {
+  if (props.isNewItem)
+  {
+    storageData.value.items.push(itemEditData.value);
+  }
   await fetch("/api/UpsertStorage", {
     method: "POST",
     body: JSON.stringify(storageData.value),
@@ -38,15 +44,19 @@ function cancelEdit()
       <div class="modal-body">
         <div class="input-group mb-3">
           <span class="input-group-text" id="id-modal-addon">ID</span>
-          <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="props.storageId" disabled>
+          <input type="text" class="form-control" aria-describedby="id-modal-addon" v-model="itemEditData.id" disabled>
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="count-modal-addon">Description</span>
-          <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="storageData.description">
+          <span class="input-group-text" id="count-modal-addon">{{ $t('labels.count') }}</span>
+          <input type="text" class="form-control" aria-describedby="count-modal-addon" v-model="itemEditData.count">
         </div>
         <div class="input-group mb-3">
-          <span class="input-group-text" id="title-modal-addon">Placement</span>
-          <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="storageData.placement">
+          <span class="input-group-text" id="title-modal-addon">{{ $t('labels.title') }}</span>
+          <input type="text" class="form-control" aria-describedby="title-modal-addon" v-model="itemEditData.title">
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">{{ $t('labels.comment') }}</span>
+          <textarea class="form-control" v-model="itemEditData.comment"></textarea>
         </div>
       </div>
       <div class="modal-footer">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { StorageModel, ItemModel } from '@/models/StorageModel';
+import EditItemModal from '@/components/EditItemModal.vue'
 import EditStorageModal from '@/components/EditStorageModal.vue'
 import LoadExcelModal from '@/components/LoadExcelModal.vue'
 import QrcodeVue from 'qrcode.vue';
@@ -150,7 +151,7 @@ async function DeleteStorage()
       <div v-else-if="storageData.items.length <= 0 " class="alert alert-primary" role="alert">
         <div class="d-flex justify-content-between">
           <span>{{ $t('labels.noDataFound') }}</span>
-          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit();">
+          <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-item-modal" @click="openEdit();">
             <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
           </button>
         </div>
@@ -163,7 +164,7 @@ async function DeleteStorage()
               <th scope="col">{{ $t('labels.count') }}</th>
               <th scope="col">{{ $t('labels.comment') }}</th>
               <th scope="col">
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit();">
+                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-item-modal" @click="openEdit();">
                   <i class="bi bi-plus-lg"></i> {{ $t('buttons.addItem') }}
                 </button>
               </th>
@@ -176,7 +177,7 @@ async function DeleteStorage()
               <td>{{ item.comment }}</td>
               <td>
                 <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal" @click="openEdit(item);">
+                  <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-item-modal" @click="openEdit(item);">
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button type="button" class="btn btn-outline-danger" @click="removeItem(item, index);">
@@ -211,7 +212,7 @@ async function DeleteStorage()
         </ul>
         <div class="card-footer">
           <div class="btn-group" role="group">
-              <button type="button" class="btn btn-outline-primary">
+              <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#edit-storage-modal">
                 <i class="bi bi-pencil"></i>
               </button>
               <button type="button" class="btn btn-outline-danger" @click="DeleteStorage()">
@@ -245,8 +246,9 @@ async function DeleteStorage()
       </div>
     </div>
   </div>
-  <EditStorageModal :modal-id="'edit-storage-modal'" :is-new-item="isNewItem" v-model:item="itemEditData" v-model:storage="storageData"></EditStorageModal>
-  <LoadExcelModal :modal-id="'load-excel-modal'" :storageId="storageId" v-model:storage="storageData"></LoadExcelModal>
+  <EditItemModal modal-id="edit-item-modal" :is-new-item="isNewItem" v-model:item="itemEditData" v-model:storage="storageData"></EditItemModal>
+  <EditStorageModal modal-id="edit-storage-modal" v-model:storage="storageData" :storageId="storageId"></EditStorageModal>
+  <LoadExcelModal modal-id="load-excel-modal" v-model:storage="storageData" :storageId="storageId"></LoadExcelModal>
 </template>
 
 <style scoped>
