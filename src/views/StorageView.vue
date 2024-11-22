@@ -6,6 +6,7 @@ import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
 import html2canvas from '@html2canvas/html2canvas';
 import printJS from 'print-js';
+import * as XLSX from 'xlsx';
 
 const route = useRoute()
 
@@ -24,7 +25,7 @@ async function OpenStorage()
 
   isLoading.value = false;
 
-  /*storageData.value = {
+  storageData.value = {
     id: 'thisisid',
     description: 'Description',
     placement: "placement asd",
@@ -42,7 +43,7 @@ async function OpenStorage()
         comment: 'comment 2 field'
       }
     ]
-  } as StorageModel;*/
+  } as StorageModel;
   
   if (response.ok)
   {
@@ -55,6 +56,23 @@ async function OpenStorage()
 }
 
 OpenStorage();
+
+function downloadXLSX()
+{
+  const workbook = XLSX.utils.book_new();
+
+  const itemsWorksheet = XLSX.utils.json_to_sheet(storageData.value.items);
+  XLSX.utils.book_append_sheet(workbook, itemsWorksheet, storageData.value.id);
+
+  const storageInfoWorksheet = XLSX.utils.json_to_sheet([{
+    id: storageData.value.id,
+    description: storageData.value.description,
+    placement: storageData.value.placement,
+  }]);
+  XLSX.utils.book_append_sheet(workbook, storageInfoWorksheet, "storage-info");
+  
+  XLSX.writeFile(workbook, "storage.xlsx", { compression: true });
+}
 
 async function printQR()
 {
@@ -197,7 +215,7 @@ async function DeleteStorage()
               <button type="button" class="btn btn-outline-danger" @click="DeleteStorage()">
                 <i class="bi bi-trash"></i>
               </button>
-              <button type="button" class="btn btn-outline-secondary">
+              <button type="button" class="btn btn-outline-secondary" @click="downloadXLSX()">
                 <i class="bi bi-cloud-download"></i>
               </button>
               <button type="button" class="btn btn-outline-secondary">
