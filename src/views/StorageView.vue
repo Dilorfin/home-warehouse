@@ -25,7 +25,7 @@ async function OpenStorage()
 
   isLoading.value = false;
 
-  storageData.value = {
+  /*storageData.value = {
     id: 'thisisid',
     description: 'Description',
     placement: "placement asd",
@@ -43,7 +43,7 @@ async function OpenStorage()
         comment: 'comment 2 field'
       }
     ]
-  } as StorageModel;
+  } as StorageModel;*/
   
   if (response.ok)
   {
