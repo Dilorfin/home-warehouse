@@ -43,6 +43,13 @@ public class StorageRepository
 
         return await _container.UpsertItemAsync(item);
     }
+    public async Task BatchUpsertAsync(List<StorageModel> items)
+    {
+        await Initialize();
+
+        var tasks = items.Select(item => _container.UpsertItemAsync(item)).ToList();
+        await Task.WhenAll(tasks);
+    }
     public async Task<List<StorageModel>> GetAllAsync()
     {
         await Initialize();

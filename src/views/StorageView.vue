@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { StorageModel, ItemModel } from '@/models/StorageModel';
 import EditStorageModal from '@/components/EditStorageModal.vue'
+import LoadExcelModal from '@/components/LoadExcelModal.vue'
 import QrcodeVue from 'qrcode.vue';
 import { useRoute } from 'vue-router';
 import { ref, watch } from 'vue';
@@ -43,8 +44,9 @@ async function OpenStorage()
         comment: 'comment 2 field'
       }
     ]
-  } as StorageModel;*/
-  
+  } as StorageModel;
+  return;*/
+
   if (response.ok)
   {
     storageData.value = await response.json() as StorageModel;
@@ -69,9 +71,9 @@ function downloadXLSX()
     description: storageData.value.description,
     placement: storageData.value.placement,
   }]);
-  XLSX.utils.book_append_sheet(workbook, storageInfoWorksheet, "storage-info");
+  XLSX.utils.book_append_sheet(workbook, storageInfoWorksheet, 'storage-info');
   
-  XLSX.writeFile(workbook, "storage.xlsx", { compression: true });
+  XLSX.writeFile(workbook, 'storage.xlsx', { compression: true });
 }
 
 async function printQR()
@@ -218,7 +220,7 @@ async function DeleteStorage()
               <button type="button" class="btn btn-outline-secondary" @click="downloadXLSX()">
                 <i class="bi bi-cloud-download"></i>
               </button>
-              <button type="button" class="btn btn-outline-secondary">
+              <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#load-excel-modal">
                 <i class="bi bi-cloud-upload"></i>
               </button>
             </div>
@@ -244,6 +246,7 @@ async function DeleteStorage()
     </div>
   </div>
   <EditStorageModal :modal-id="'edit-storage-modal'" :is-new-item="isNewItem" v-model:item="itemEditData" v-model:storage="storageData"></EditStorageModal>
+  <LoadExcelModal :modal-id="'load-excel-modal'" :storageId="storageId" v-model:storage="storageData"></LoadExcelModal>
 </template>
 
 <style scoped>
