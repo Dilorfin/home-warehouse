@@ -1,0 +1,27 @@
+meta {
+  name: Delete Storage
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{api-url}}/DeleteStorage
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "some-test",
+    "description": "description",
+    "placement": null,
+    "items": [
+      {
+        "id": "item-id",
+        "count": 2,
+        "title": "DisplayPort Cable",
+        "comment": null
+      }
+    ]
+  }
+}

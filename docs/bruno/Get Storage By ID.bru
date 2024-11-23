@@ -1,0 +1,15 @@
+meta {
+  name: Get Storage By ID
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api-url}}/GetStorage/?id=test-test
+  body: none
+  auth: none
+}
+
+params:query {
+  id: test-test
+}
